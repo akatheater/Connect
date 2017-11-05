@@ -8,19 +8,25 @@ public class FunctionCondition : Function {
     public ConditionTrigger target;
     public bool condition = true;
     private int num;
+    private bool on = false;
 	void Start () {
         num = target.conditionNum;
         target.conditions.Add(!condition);
-	}
+        target.conditionNum++;
+    }
 
     protected override void function(PlayerController player)
     {
-        target.conditions[num] = condition;
-        target.Judge();
-    }
-    protected override void function2(PlayerController player)
-    {
-        target.conditions[num] = !condition;
-        target.Judge();
+        if (!on)
+        {
+            target.conditions[num] = condition;
+            on = true;
+        }
+        else
+        {
+            target.conditions[num] = !condition;
+            on = false;
+        }
+            target.Judge();
     }
 }

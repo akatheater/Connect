@@ -5,7 +5,7 @@ using UnityEngine;
 [AddComponentMenu("Function Trigger/Conditional trigger")]
 public class ConditionTrigger : FunctionTrigger
 {
-    [HideInInspector]
+   // [HideInInspector]
     public List<bool> conditions;
     [HideInInspector]
     public int conditionNum = 0;
@@ -19,6 +19,7 @@ public class ConditionTrigger : FunctionTrigger
     {
         if (on || conditions.Count == 0) return;
         bool result = true;
+        print(conditionNum + ";" + conditions.Count);
         foreach (bool b in conditions)
         {
             result = result && b;
