@@ -40,10 +40,4 @@ public class FunctionTrigger : MonoBehaviour {
         gameObject.AddComponent<FunctionSycMoving>();
     }
 
-    [ContextMenu("能量变化")]
-    public void AddEnergy()
-    {
-        gameObject.AddComponent<FunctionEnergy>();
-    }
-
 }
