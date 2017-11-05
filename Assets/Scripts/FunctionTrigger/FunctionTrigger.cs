@@ -46,4 +46,9 @@ public class FunctionTrigger : MonoBehaviour {
         gameObject.AddComponent<FunctionEnergy>();
     }
 
+    [ContextMenu("逻辑判断")]
+    public void AddCondition()
+    {
+        gameObject.AddComponent<FunctionCondition>();
+    }
 }
