@@ -7,6 +7,23 @@ using UnityEngine;
 /// </summary>
 public class BoardMover : MonoBehaviour
 {
+    /// <summary>
+    /// 移动所需属性
+    /// </summary>
+    [System.Serializable]
+    public struct Parameter
+    {
+        [Header("移动目标")]
+        public Transform target;
+        [Header("移动距离")]
+        public Vector3 delta;
+        [Header("平滑度, 建议默认为0.9915")]
+        [Range(0.9f, 0.999f)]
+        public float smoothness;
+        [Header("延迟")]
+        public float delaySeconds;
+    }
+
     public static void Move(Transform board, Vector3 delta, float param, float delaySeconds)
     {
         GameSystem.settings.StartCoroutine(StartMove(board, delta, param, delaySeconds));
@@ -15,23 +32,7 @@ public class BoardMover : MonoBehaviour
     private static IEnumerator StartMove(Transform board, Vector3 delta, float param, float delaySeconds)
     {
         yield return new WaitForSeconds(delaySeconds);
-        yield return Moving(board, delta, param);
-    }
-
-    private static IEnumerator Moving(Transform board, Vector3 delta, float param)
-    {
-        if (delta.sqrMagnitude < 0.001f)
-        {
-            board.Translate(delta);
-            yield return 0;
-        }
-        else
-        {
-            Vector3 addition = delta * param;
-            delta -= addition;
-            board.Translate(addition);
-            yield return 0;
-            yield return Moving(board, delta, param);
-        }
+        yield return GameSystem.Moving(board, delta, param);
     }
 }
+

@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
     [Header("速度")]
     [SerializeField]
     private float speed;
+    [Header("爬坡高度")]
+    [Range(0, 0.7f)]
+    public float climbingHeight;
+    [Range(0.001f, 0.1f)]
+    public float climbingLowestHeight;
     [Header("重力加速度")]
     [SerializeField]
     private float g;
@@ -42,45 +47,56 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// 当前接触地板数量
     /// </summary>
+    private int cGroundNum = 0;
+    private bool climbing = false;
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Ground" && collision.contacts[0].thisCollider.tag == "Player")
+        Vector3 point = collision.contacts[0].point;
+        float h = point.y - transform.position.y;
+        //print("enter,tag:" + collision.collider.tag + "h:" + h);
+        //如果踩到地板
+        if (collision.collider.tag == "Ground" && h < climbingHeight)
         {
+            cGroundNum++;
+            //print("cGroundNum:" + cGroundNum);
             collision.collider.tag = "TouchedGround";
             isGround = true;
-            animator.SetBool("isGround", true);
-            GetComponent<ParticleSystem>().Play();
+            if (!climbing)
+            {
+                animator.SetBool("isGround", true);
+                GetComponent<ParticleSystem>().Play();
+            }
+            //if (h > climbingLowestHeight) climbing = true;
             ySpeed = 0;
         }
-        else if(collision.collider.tag == "TouchedGround")
-        {
-            isCollisionRouse++;
-        }
-        else
-        {
-            print("【Report at time " + Time.time + "】");
-            print("Tag: " + collision.collider.tag);
-            print("ThisTag: " + collision.contacts[0].thisCollider.tag);
-            print("RouseNum: " + isCollisionRouse);
-        }
     }
-    private int isCollisionRouse = 0;//干扰
+
     private void OnCollisionExit(Collision collision)
     {
-        if (isCollisionRouse>0)
-        {
-            //被不是脚上的碰撞箱干扰！
-            isCollisionRouse--;
-        }
-        else if (collision.collider.tag == "TouchedGround")
+        //print("exit,tag:"+ collision.collider.tag);
+        if (collision.collider.tag == "TouchedGround")
         {
             collision.collider.tag = "Ground";
-            isGround = false;
-            animator.SetBool("isGround", false);
-            GetComponent<ParticleSystem>().Stop();
+            cGroundNum--;
+            //print("cGroundNum:" + cGroundNum);
+            if (cGroundNum <= 0)
+            {
+                isGround = false;
+                if (!climbing)
+                {
+                    animator.SetBool("isGround", false);
+                    GetComponent<ParticleSystem>().Stop();
+                }
+                else
+                {
+                    //print("结束");
+                    climbing = false;
+                }
+            }
         }
-
     }
+
 
     private void KeyBoardInput()
     {
@@ -94,22 +110,77 @@ public class PlayerController : MonoBehaviour
     {
         ySpeed = jumpSpeed;
     }
+    // 爬行方向
+    Vector3 climbVXY = Vector3.forward;
+    float climbY = 0;
+    public float modeHeight;
+    private void OnCollisionStay(Collision collision)
+    {
+        foreach (ContactPoint c in collision.contacts)
+        {
+            if (cGroundNum <= 0) return;
+            float h = c.point.y - transform.position.y;
+            if (h < climbingHeight && h > climbingLowestHeight)
+            {
+                Vector3 to = c.point - transform.position - new Vector3(0, modeHeight, 0);
+                climbVXY = Vector3.Cross(Vector3.Cross(to, Vector3.up), to);
+                climbY = climbVXY.y;
+                climbVXY.y = 0;
+                float m = climbVXY.magnitude;
+                climbVXY /= m;
+                climbY /= m;
+                if (!climbing)
+                {
+                    climbing = true;
+                    //print("开始");
+                    //print("start,tag:" + collision.collider.tag + "h:" + h);
+                }
+                //print("CXY:" + climbVXY + ";CY:" + climbY);
+                return;
+            }
+        }
+        //if (climbing) print("结束");
+        climbing = false;
+    }
     private void Move(float h, float v)
     {
+        Vector3 dirXY;
+        float vXY = 0;
+
+
+        Vector3 right = Camera.main.transform.right;//右方单位矢量
+        Vector3 foward = Quaternion.AngleAxis(-90, Vector3.up) * right;//前方单位矢量
+        dirXY = right * h * speed + foward * v * speed;//平面速度矢量
+        vXY = dirXY.sqrMagnitude;
+        animator.SetFloat("v", vXY);
+
         if (!isGround && ySpeed > -8)
         {
             ySpeed -= g * Time.deltaTime;
         }
-        Vector3 right = Camera.main.transform.right;//右方单位矢量
-        Vector3 foward = Quaternion.AngleAxis(-90, Vector3.up) * right;//前方单位矢量
-        Vector3 dirXY = right * h * speed + foward * v * speed;//平面速度矢量
-        animator.SetFloat("v", dirXY.magnitude);
-        dir = dirXY + Vector3.up * ySpeed;//最终速度矢量
+        else if (climbing)
+        {
+            float dot = Vector3.Dot(climbVXY, dirXY);
+            if (dot > 0)
+            {
+                //上楼
+                ySpeed = dot * climbY;
+                //print("dot: " + dot + ";y:" + climbY + ";ySpeed:" + ySpeed);
+            }
+            //else if (climbY > 1)
+            //{
+            //    // 下滑
+            //    dirXY = -climbVXY;
+            //    ySpeed = -speed;
+            //}
+        }
 
+        dir = dirXY + Vector3.up * ySpeed;//最终速度矢量
+        Debug.DrawLine(transform.position, transform.position + dir);
         //特殊状态
         if (Buff != null) Buff(this);
 
-        if (dirXY.sqrMagnitude > 0.1f)
+        if (vXY > 0.2f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirXY, Vector3.up), 1 - smoothness);
         }
@@ -118,7 +189,6 @@ public class PlayerController : MonoBehaviour
     [ContextMenu("Error Report")]
     void ErrorReport()
     {
-        print("RouseNum: " + isCollisionRouse);
         print("ySpeed: " + ySpeed);
     }
 }
