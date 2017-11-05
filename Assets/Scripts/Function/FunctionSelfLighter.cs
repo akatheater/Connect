@@ -24,8 +24,6 @@ public class FunctionSelfLighter : Function {
     [Range(0, 1)]
     private float emissionRate;
 
-    [Header("贴图")]
-    public Texture tex;
 
     private bool on = false;
 
@@ -39,8 +37,6 @@ public class FunctionSelfLighter : Function {
     }
     private void Start()
     {
-        GetComponent<Renderer>().sharedMaterial.SetTexture("_EmissionMap", tex);
-
         colorChanger = GetComponent<ColorChanger>();
         if (type == BoardLightingType.Dim)
         {

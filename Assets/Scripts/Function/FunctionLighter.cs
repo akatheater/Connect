@@ -19,9 +19,6 @@ public class FunctionLighter : Function
     [Range(0, 1)]
     private float emissionRate;
 
-    [Header("贴图")]
-    public Texture tex;
-
     public Renderer[] target;
 
     private bool on = false;
@@ -34,9 +31,10 @@ public class FunctionLighter : Function
             {
                 target[i].sharedMaterial.shader = s;
             }
-            target[i].sharedMaterial.SetTexture("_EmissionMap", tex);
             if (target[i].GetComponent<ColorChanger>() == null)
-                target[i].gameObject.AddComponent<ColorChanger>();
+            {
+                  target[i].gameObject.AddComponent<ColorChanger>();
+            }
             if (type == FunctionSelfLighter.BoardLightingType.Dim)
             {
                 target[i].GetComponent<ColorChanger>().ChangeToColor(targetColor());
@@ -51,11 +49,9 @@ public class FunctionLighter : Function
             if (!on)
             {
                 target[i].GetComponent<ColorChanger>().ChangeToColor(targetColor());
-                on = true;
             }
             else
             {
-                on = false;
                 target[i].GetComponent<ColorChanger>().ResetColor();
             }
             if (type != FunctionSelfLighter.BoardLightingType.Bad)
@@ -64,6 +60,7 @@ public class FunctionLighter : Function
                 Destroy(this);
             }
         }
+        on = !on;
     }
 
     private Color targetColor()

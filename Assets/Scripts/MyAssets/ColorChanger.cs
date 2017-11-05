@@ -10,7 +10,7 @@ using UnityEngine;
 public class ColorChanger : MonoBehaviour {
     private Material material;
     private Color origColor;
-    [SerializeField] private string colorName;
+    [SerializeField] private string colorName = "_EmissionColor";
 
     [Range(0.7f, 0.96f)]
     [SerializeField]
@@ -23,7 +23,7 @@ public class ColorChanger : MonoBehaviour {
         origColor = material.GetColor(colorName);
     }
 
-    private void Reset()
+    public void Reset()
     {
         smoothness = 0.897f;
         colorName = "_EmissionColor";
