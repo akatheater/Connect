@@ -17,7 +17,7 @@ public class ColorChanger : MonoBehaviour {
     [Header("平滑度（默认0.897）")]
     private float smoothness = 0.897f;
 
-    private void Start()
+    private void Awake()
     {
         material = GetComponent<Renderer>().material;
         origColor = material.GetColor(colorName);

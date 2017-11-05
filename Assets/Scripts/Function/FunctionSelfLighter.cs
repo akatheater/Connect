@@ -59,7 +59,11 @@ public class FunctionSelfLighter : Function {
             on = false;
             colorChanger.ResetColor();
         }
-        if (type != BoardLightingType.Bad) Destroy(this);
+        if (type != BoardLightingType.Bad)
+        {
+            Boom();
+            Destroy(this);
+        }
     }
 
     private Color targetColor()

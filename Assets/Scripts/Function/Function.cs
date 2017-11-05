@@ -19,6 +19,12 @@ public class Function : MonoBehaviour {
         overrideTrigger.function2 += function2;
     }
 
+    protected void Boom()
+    {
+        overrideTrigger.function -= function;
+        overrideTrigger.function2 -= function2;
+    }
+
     protected virtual void function(PlayerController player)
     {
 
