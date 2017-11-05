@@ -10,10 +10,6 @@ public class FunctionActivator : Function
     [Header("激活或隐藏：")]
     [SerializeField]
     private bool ifActivate = true;
-    private void Awake()
-    {
-        GetComponent<Collider>().isTrigger = true;
-    }
     protected override void function(PlayerController player)
     {
         target.SetActive(ifActivate);
