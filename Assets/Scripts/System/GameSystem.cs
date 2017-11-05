@@ -56,6 +56,27 @@ public class GameSystem : MonoBehaviour {
             yield return Moving(target, delta, param);
         }
     }
+    public static PlayerUp playerUp;
+    public static int energy = 0;
+    [Header("最大能量")]
+    public int maxEnergy;
+    public static void flushEnergy()
+    {
+        playerUp.energyRenderer.material.SetTexture("_EmissionMap", playerUp.energyTexture[energy]);
+        playerUp.energy = energy;
+    }
+    public static void EnergyDown()
+    {
+        energy--;
+        if (energy < 0) energy = 0;
+        flushEnergy();
+    }
+    public static void EnergyUp()
+    {
+        energy++;
+        if (energy > settings.maxEnergy) energy = settings.maxEnergy;
+        flushEnergy();
+    }
 }
 public delegate void BuffDelegate(PlayerController player);
 //基本方向

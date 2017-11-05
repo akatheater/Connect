@@ -241,7 +241,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1620667981975114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.87, y: 3.8, z: -24.61}
+  m_LocalPosition: {x: 3.87, y: 5.46, z: -18.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4705536845702556}
@@ -592,6 +592,23 @@ MonoBehaviour:
   g: 14
   jumpSpeed: 6.5
   GodMode: 1
+  energyTexture:
+  - {fileID: 2800000, guid: 4c51274cb84641e46ad71d772760991d, type: 3}
+  - {fileID: 2800000, guid: 01b4bcf9c35df0841a7d2dbb4e36cd54, type: 3}
+  - {fileID: 2800000, guid: 03dcce4c0e80b2642af559370bc271ee, type: 3}
+  - {fileID: 2800000, guid: 4b070c4a518f14540b7f5f339c380fcf, type: 3}
+  - {fileID: 2800000, guid: 04169d7f55365e8478223acc931a54e7, type: 3}
+  - {fileID: 2800000, guid: 548bdcdbae5ca40408634b6228f78c35, type: 3}
+  - {fileID: 2800000, guid: b8e14e533e4d57d4c8cdad66eca9980d, type: 3}
+  - {fileID: 2800000, guid: 53eead5bfc70f1146b1a92bb35bf1971, type: 3}
+  - {fileID: 2800000, guid: 0fd456ef0003f4c4bbc968090763970b, type: 3}
+  - {fileID: 2800000, guid: ada9a332f4ac41c4b827e8c789fcdb09, type: 3}
+  - {fileID: 2800000, guid: 16aa6768673215142911ca846c87f15f, type: 3}
+  - {fileID: 2800000, guid: b792e4824b09daa42bb539cfa3f938c8, type: 3}
+  - {fileID: 2800000, guid: 21320f0082f6a2c47a145a098aaee340, type: 3}
+  - {fileID: 2800000, guid: 7fcac9dafcb8b774c91b57715b590183, type: 3}
+  energyRenderer: {fileID: 23282283062785724}
+  energy: 0
   modeHeight: 0.8
 --- !u!135 &135036107391537532
 SphereCollider:
@@ -664,7 +681,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 2144650580
+  randomSeed: -582548960
   InitialModule:
     serializedVersion: 3
     enabled: 1

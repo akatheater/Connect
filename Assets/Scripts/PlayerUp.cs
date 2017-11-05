@@ -28,6 +28,13 @@ public class PlayerUp : PlayerController
     private int cGroundNum = 0;
     private bool climbing = false;
 
+    //能量
+    [Header("背后贴图")]
+    public Texture[] energyTexture;
+    public Renderer energyRenderer;
+    public int energy;
+    
+
     private void OnCollisionEnter(Collision collision)
     {
         Vector3 point = collision.contacts[0].point;
@@ -146,9 +153,19 @@ public class PlayerUp : PlayerController
         }
     }
 
-
-    //能量
-    [Header("最大能量")]
-    [SerializeField]
-    private int maxPower;
+    [ContextMenu("能量增加")]
+    public void AddEnergy()
+    {
+        GameSystem.EnergyUp();
+    }
+    [ContextMenu("能量减少")]
+    public void SubEnergy()
+    {
+        GameSystem.EnergyDown();
+    }
+    private void Start()
+    {
+        GameSystem.playerUp = this;
+        GameSystem.flushEnergy();
+    }
 }
