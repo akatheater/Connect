@@ -7,13 +7,17 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Collider))]
 [AddComponentMenu("Function Trigger/Botton")]
-public class Botton : FunctionTrigger {
+public class Botton : FunctionTrigger
+{
     [Header("【按钮！】")]
     [Header("按钮朝向")]
     public BasicDirection direction;
     private Vector3 dirVector;
     [Header("按钮厚度")]
     public float size;
+    [Header("一次性？")]
+    public bool oneTime = true;
+    private bool on = false;
     private void Awake()
     {
         switch (direction)
@@ -41,10 +45,20 @@ public class Botton : FunctionTrigger {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.tag == "Player")
+        if (collision.collider.tag == "Player")
         {
-            GameSystem.settings.StartCoroutine(GameSystem.Moving(transform, dirVector * (-size)));
-            if(function!=null)function(collision.gameObject.GetComponent<PlayerController>());
+            if (!on)
+            {
+                GameSystem.settings.StartCoroutine(GameSystem.Moving(transform, dirVector * (-size)));
+                if (function != null) function(collision.gameObject.GetComponent<PlayerController>());
+                on = true;
+            }
+            else if (!oneTime)
+            {
+                GameSystem.settings.StartCoroutine(GameSystem.Moving(transform, dirVector * (size)));
+                if (function2 != null) function2(collision.gameObject.GetComponent<PlayerController>());
+                on = false;
+            }
         }
     }
 }

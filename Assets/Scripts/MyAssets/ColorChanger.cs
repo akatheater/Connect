@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 平滑改变颜色
 /// </summary>
+[DisallowMultipleComponent]
 [AddComponentMenu("MyAssets/Color Changer")]
 public class ColorChanger : MonoBehaviour {
     private Material material;

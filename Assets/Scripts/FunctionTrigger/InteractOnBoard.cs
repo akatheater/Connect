@@ -7,7 +7,8 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Collider))]
 [AddComponentMenu("Function Trigger/Interact On Board")]
-public class InteractOnBoard : FunctionTrigger {
+public class InteractOnBoard : FunctionTrigger
+{
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "Player")
@@ -26,7 +27,7 @@ public class InteractOnBoard : FunctionTrigger {
     {
         if (GameSystem.InputKeys.Interact())
         {
-            function(player);
+            if (function != null) function(player);
         }
     }
 }

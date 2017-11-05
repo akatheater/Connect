@@ -17,23 +17,35 @@ public class FunctionSelfLighter : Function {
     [Header("板子种类")]
     [SerializeField]
     BoardLightingType type;
-    static BoardLightingType dim = BoardLightingType.Dim;
+    //static BoardLightingType dim = BoardLightingType.Dim;
     [SerializeField]
     [Header("亮度：")]
-    [ConditionalHide("type", "dim", false)]
-    //[Range(0, 1)]
+    //[ConditionalHide("type", "dim", false)]
+    [Range(0, 1)]
     private float emissionRate;
+
+    [Header("贴图")]
+    public Texture tex;
+
     private bool on = false;
 
+    private void Reset()
+    {
+        Shader s = Shader.Find("Standard");
+        if (!GetComponent<Renderer>().sharedMaterial.shader.Equals(s))
+        {
+            GetComponent<Renderer>().sharedMaterial.shader = s;
+        }
+        GetComponent<Renderer>().sharedMaterial.SetTexture("_EmissionMap", tex);
+    }
     private void Start()
     {
         colorChanger = GetComponent<ColorChanger>();
-        Shader s = Shader.Find("Standard");
-        if (!GetComponent<Renderer>().material.shader.Equals(s))
+        if (type == BoardLightingType.Dim)
         {
-            GetComponent<Renderer>().material.shader = s;
+            colorChanger.ChangeToColor(targetColor());
+            on = true;
         }
-        if (type == dim) emissionRate = 0;
     }
     protected override void function(PlayerController player)
     {
@@ -41,13 +53,13 @@ public class FunctionSelfLighter : Function {
         {
             colorChanger.ChangeToColor(targetColor());
             on = true;
-            if (type != BoardLightingType.Bad) Destroy(this);
         }
         else
         {
             on = false;
             colorChanger.ResetColor();
         }
+        if (type != BoardLightingType.Bad) Destroy(this);
     }
 
     private Color targetColor()

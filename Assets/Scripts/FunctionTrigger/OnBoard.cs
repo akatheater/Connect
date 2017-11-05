@@ -7,19 +7,20 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(Collider))]
 [AddComponentMenu("Function Trigger/On Board")]
-public class OnBoard : FunctionTrigger {
+public class OnBoard : FunctionTrigger
+{
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "Player")
         {
-            function(collision.gameObject.GetComponent<PlayerController>());
+            if (function != null) function(collision.gameObject.GetComponent<PlayerController>());
         }
     }
     private void OnCollisionExit(Collision collision)
     {
         if (collision.collider.tag == "Player")
         {
-            function2(collision.gameObject.GetComponent<PlayerController>());
+            if (function2 != null) function2(collision.gameObject.GetComponent<PlayerController>());
         }
     }
 }
