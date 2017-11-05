@@ -8,12 +8,12 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequireComponent(typeof(ColorChanger))]
 public class FunctionSelfLighter : Function {
-    enum BoardLightingType
+    public enum BoardLightingType
     {
         Dim, Bright, Bad
     }
     private ColorChanger colorChanger;
-    [Header("【板子发光器】")]
+    [Header("【自发光器】")]
     [Header("板子种类")]
     [SerializeField]
     BoardLightingType type;
@@ -36,10 +36,11 @@ public class FunctionSelfLighter : Function {
         {
             GetComponent<Renderer>().sharedMaterial.shader = s;
         }
-        GetComponent<Renderer>().sharedMaterial.SetTexture("_EmissionMap", tex);
     }
     private void Start()
     {
+        GetComponent<Renderer>().sharedMaterial.SetTexture("_EmissionMap", tex);
+
         colorChanger = GetComponent<ColorChanger>();
         if (type == BoardLightingType.Dim)
         {

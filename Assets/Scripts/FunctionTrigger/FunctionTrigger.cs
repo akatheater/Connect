@@ -22,6 +22,12 @@ public class FunctionTrigger : MonoBehaviour {
         gameObject.AddComponent<FunctionSelfLighter>();
     }
 
+    [ContextMenu("使发光")]
+    public void AddLighter()
+    {
+        gameObject.AddComponent<FunctionLighter>();
+    }
+
     [ContextMenu("激活其他物体")]
     public void AddActivator()
     {

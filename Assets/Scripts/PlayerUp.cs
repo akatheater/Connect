@@ -145,4 +145,10 @@ public class PlayerUp : PlayerController
             //}
         }
     }
+
+
+    //能量
+    [Header("最大能量")]
+    [SerializeField]
+    private int maxPower;
 }
