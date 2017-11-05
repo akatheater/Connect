@@ -30,7 +30,13 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
         bool enabled = true;
         //Look for the sourcefield within the object that the property belongs to
         SerializedProperty sourcePropertyValue = property.serializedObject.FindProperty(condHAtt.ConditionalSourceField);
-        if (sourcePropertyValue != null)
+        SerializedProperty sourcePropertyValue2 = property.serializedObject.FindProperty(condHAtt.ConditionalSourceField2);
+        if (condHAtt.con2exist && sourcePropertyValue2 != null)
+        {
+            enabled = sourcePropertyValue2.enumValueIndex == sourcePropertyValue.enumValueIndex;
+            if (!condHAtt.State) enabled = !enabled;
+        }
+        else if (sourcePropertyValue != null)
         {
             enabled = sourcePropertyValue.boolValue;
             if (!condHAtt.State) enabled = !enabled;

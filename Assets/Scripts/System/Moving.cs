@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 移动板子
+/// 移动父类
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
-public class MovingBoard : Board {
+public class Moving : MonoBehaviour {
     protected Vector3 v;
     private void Update()
     {
@@ -22,20 +22,6 @@ public class MovingBoard : Board {
     protected virtual void VolecityFlush()
     {
 
-    }
-    protected override void OnBoard(PlayerController player)
-    {
-        base.OnBoard(player);
-        player.Buff += MovePlayer;
-    }
-    protected override void LeaveBoard(PlayerController player)
-    {
-        base.LeaveBoard(player);
-        player.Buff -= MovePlayer;
-    }
-    private void MovePlayer(PlayerController player)
-    {
-        player.dir += v;
     }
     private void Move(Transform target)
     {

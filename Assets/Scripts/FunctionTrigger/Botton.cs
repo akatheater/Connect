@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 作为所有按钮的父类
+/// 作为所有按钮的基础组件
 /// </summary>
 [RequireComponent(typeof(Collider))]
-public class Botton : MonoBehaviour {
+[AddComponentMenu("Function Trigger/Botton")]
+public class Botton : FunctionTrigger {
     [Header("【按钮！】")]
     [Header("按钮朝向")]
     public BasicDirection direction;
@@ -43,12 +44,7 @@ public class Botton : MonoBehaviour {
         if(collision.collider.tag == "Player")
         {
             GameSystem.settings.StartCoroutine(GameSystem.Moving(transform, dirVector * (-size)));
-            OnPressDown();
+            function(collision.gameObject.GetComponent<PlayerController>());
         }
-    }
-
-    protected virtual void OnPressDown()
-    {
-
     }
 }

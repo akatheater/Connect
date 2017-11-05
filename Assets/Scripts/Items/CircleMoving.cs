@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[AddComponentMenu("Items/Circle Moving Board")]
-public class CircleMovingBoard : MovingBoard
+[AddComponentMenu("Items/Circle Moving")]
+public class CircleMoving : Moving
 {
     [Header("【平台移动组件】")]
     [Header("轴心点")]

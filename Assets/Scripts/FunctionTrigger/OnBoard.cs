@@ -3,30 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 板子父类
+/// 板子
 /// </summary>
 [RequireComponent(typeof(Collider))]
-public class Board : MonoBehaviour {
+[AddComponentMenu("Function Trigger/On Board")]
+public class OnBoard : FunctionTrigger {
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "Player")
         {
-            OnBoard(collision.gameObject.GetComponent<PlayerController>());
+            function(collision.gameObject.GetComponent<PlayerController>());
         }
     }
     private void OnCollisionExit(Collision collision)
     {
         if (collision.collider.tag == "Player")
         {
-            LeaveBoard(collision.gameObject.GetComponent<PlayerController>());
+            function2(collision.gameObject.GetComponent<PlayerController>());
         }
-    }
-    protected virtual void OnBoard(PlayerController player)
-    {
-
-    }
-    protected virtual void LeaveBoard(PlayerController player)
-    {
-
     }
 }

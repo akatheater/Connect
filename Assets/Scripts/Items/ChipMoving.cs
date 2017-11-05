@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [AddComponentMenu("Items/Chip Moving")]
-public class ChipMoving : MovingBoard {
+public class ChipMoving : Moving {
 
     [Header("【平台移动组件】")]
     [Header("速度")]

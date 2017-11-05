@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[AddComponentMenu("Items/Mover Board")]
-public class MoverBoard : Board
-{
-    [Header("【踩上去可以控制其他平台移动的组件】")]
+/// <summary>
+/// 可以控制其他平台移动的组件
+/// </summary>
+public class FunctionMover : Function {
+    [Header("【可以控制其他平台移动的组件】")]
     [SerializeField]
     [Header("板子们")]
     private BoardMover.Parameter[] parameter;
 
     private void Reset()
     {
-        for(int i =0;i<parameter.Length;i++)
+        parameter = new BoardMover.Parameter[1];
+        for (int i = 0; i < parameter.Length; i++)
         {
             parameter[i].smoothness = 0.9915f;
             parameter[i].delaySeconds = 0;
             parameter[i].delta = Vector3.up;
         }
     }
-    protected override void OnBoard(PlayerController player)
+    protected override void function(PlayerController player)
     {
-        base.OnBoard(player);
         if (parameter != null)
         {
             foreach (BoardMover.Parameter p in parameter)
