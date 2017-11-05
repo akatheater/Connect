@@ -24,15 +24,21 @@ public class BoardMover : MonoBehaviour
         public float delaySeconds;
     }
 
-    public static void Move(Transform board, Vector3 delta, float param, float delaySeconds)
+    public static void Move(Transform board, Vector3 delta, float param, float delaySeconds, MonoBehaviour zaiTi)
     {
-        GameSystem.settings.StartCoroutine(StartMove(board, delta, param, delaySeconds));
+        zaiTi.StartCoroutine(StartMove(board, delta, param, delaySeconds, zaiTi));
     }
 
-    private static IEnumerator StartMove(Transform board, Vector3 delta, float param, float delaySeconds)
+    private static IEnumerator StartMove(Transform board, Vector3 delta, float param, float delaySeconds, MonoBehaviour zaiTi)
     {
         yield return new WaitForSeconds(delaySeconds);
-        yield return GameSystem.Moving(board, delta, param);
+        StopAndStart(board, delta, param, zaiTi);
+        yield return 0;
+    }
+    private static void StopAndStart(Transform board, Vector3 delta, float param, MonoBehaviour zaiTi)
+    {
+        zaiTi.StopAllCoroutines();
+        zaiTi.StartCoroutine(GameSystem.Moving(board, delta, param));
     }
 }
 
