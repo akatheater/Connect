@@ -44,7 +44,7 @@ public class Botton : FunctionTrigger {
         if(collision.collider.tag == "Player")
         {
             GameSystem.settings.StartCoroutine(GameSystem.Moving(transform, dirVector * (-size)));
-            function(collision.gameObject.GetComponent<PlayerController>());
+            if(function!=null)function(collision.gameObject.GetComponent<PlayerController>());
         }
     }
 }
