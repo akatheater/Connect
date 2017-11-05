@@ -10,6 +10,7 @@ public class FunctionEnergy : Function {
     [Header("是否增加能量")]
     public bool add;
     [Header("能量变化数目")]
+    [Range(0,13)]
     public int EnergyNum;
 
     protected override void function(PlayerController player)
