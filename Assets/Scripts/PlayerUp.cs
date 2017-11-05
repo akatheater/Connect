@@ -78,8 +78,8 @@ public class PlayerUp : PlayerController
 
     protected override void KeyBoardInput()
     {
-        if (GameSystem.InputKeys.Jump()) Jump();
         base.KeyBoardInput();
+        if (GameSystem.InputKeys.Jump()) Jump();
     }
 
     private void Jump()

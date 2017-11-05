@@ -33,16 +33,16 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        KeyBoardInput();
-    }
-
-    protected virtual void KeyBoardInput()
-    {
         if (!active)
         {
             Move(0, 0);
             return;
         }
+        KeyBoardInput();
+    }
+
+    protected virtual void KeyBoardInput()
+    {
         float h = GameSystem.InputKeys.Horizontal();
         float v = GameSystem.InputKeys.Vertical();
         Move(h, v);
