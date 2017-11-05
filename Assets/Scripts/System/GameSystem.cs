@@ -14,6 +14,14 @@ public class GameSystem : MonoBehaviour {
         {
             return Input.GetKeyDown(KeyCode.Space);
         }
+        public static bool Fly()
+        {
+            return Input.GetKey(KeyCode.Space);
+        }
+        public static bool Crouch()
+        {
+            return Input.GetKey(KeyCode.LeftControl);
+        }
         public static float Horizontal()
         {
             return Input.GetAxis("Horizontal");
@@ -25,6 +33,10 @@ public class GameSystem : MonoBehaviour {
         public static bool Interact()
         {
             return Input.GetKeyDown(KeyCode.F);
+        }
+        public static bool Switch()
+        {
+            return Input.GetKeyDown(KeyCode.Q);
         }
     }
     //移动物体的协程

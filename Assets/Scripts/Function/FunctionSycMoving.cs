@@ -13,6 +13,6 @@ public class FunctionSycMoving : Function {
     }
     private void MovePlayer(PlayerController player)
     {
-        player.dir += GetComponent<Rigidbody>().velocity;
+        player.dir += GetComponent<Moving>().v;
     }
 }

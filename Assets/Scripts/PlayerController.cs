@@ -13,26 +13,18 @@ public class PlayerController : MonoBehaviour
     [Header("【人物组件】")]
     [Header("速度")]
     [SerializeField]
-    private float speed;
-    [Header("爬坡高度")]
-    [Range(0, 0.7f)]
-    public float climbingHeight;
-    [Range(0.001f, 0.1f)]
-    public float climbingLowestHeight;
-    [Header("重力加速度")]
-    [SerializeField]
-    private float g;
-    private float ySpeed;
-    [SerializeField] private float jumpSpeed;
-    private bool isGround = false;
+    protected float speed;
+    protected float ySpeed;
     [Header("转弯平滑度")]
     [SerializeField]
     [Range(0.05f, 0.95f)]
-    private float smoothness;
-    private Animator animator;
+    protected float smoothness;
+    protected Animator animator;
     [HideInInspector]
     public Vector3 dir;
     public BuffDelegate Buff;
+    [HideInInspector]
+    public bool active = true;
 
 
     private void Awake()
@@ -44,105 +36,20 @@ public class PlayerController : MonoBehaviour
         KeyBoardInput();
     }
 
-    /// <summary>
-    /// 当前接触地板数量
-    /// </summary>
-    private int cGroundNum = 0;
-    private bool climbing = false;
-
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void KeyBoardInput()
     {
-        Vector3 point = collision.contacts[0].point;
-        float h = point.y - transform.position.y;
-        //print("enter,tag:" + collision.collider.tag + "h:" + h);
-        //如果踩到地板
-        if (collision.collider.tag == "Ground" && h < climbingHeight)
+        if (!active)
         {
-            cGroundNum++;
-            //print("cGroundNum:" + cGroundNum);
-            collision.collider.tag = "TouchedGround";
-            isGround = true;
-            if (!climbing)
-            {
-                animator.SetBool("isGround", true);
-                GetComponent<ParticleSystem>().Play();
-            }
-            //if (h > climbingLowestHeight) climbing = true;
-            ySpeed = 0;
+            Move(0, 0);
+            return;
         }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        //print("exit,tag:"+ collision.collider.tag);
-        if (collision.collider.tag == "TouchedGround")
-        {
-            collision.collider.tag = "Ground";
-            cGroundNum--;
-            //print("cGroundNum:" + cGroundNum);
-            if (cGroundNum <= 0)
-            {
-                isGround = false;
-                if (!climbing)
-                {
-                    animator.SetBool("isGround", false);
-                    GetComponent<ParticleSystem>().Stop();
-                }
-                else
-                {
-                    //print("结束");
-                    climbing = false;
-                }
-            }
-        }
-    }
-
-
-    private void KeyBoardInput()
-    {
-        if (GameSystem.InputKeys.Jump()) Jump();
         float h = GameSystem.InputKeys.Horizontal();
         float v = GameSystem.InputKeys.Vertical();
         Move(h, v);
     }
 
-    private void Jump()
-    {
-        ySpeed = jumpSpeed;
-    }
-    // 爬行方向
-    Vector3 climbVXY = Vector3.forward;
-    float climbY = 0;
-    public float modeHeight;
-    private void OnCollisionStay(Collision collision)
-    {
-        foreach (ContactPoint c in collision.contacts)
-        {
-            if (cGroundNum <= 0) return;
-            float h = c.point.y - transform.position.y;
-            if (h < climbingHeight && h > climbingLowestHeight)
-            {
-                Vector3 to = c.point - transform.position - new Vector3(0, modeHeight, 0);
-                climbVXY = Vector3.Cross(Vector3.Cross(to, Vector3.up), to);
-                climbY = climbVXY.y;
-                climbVXY.y = 0;
-                float m = climbVXY.magnitude;
-                climbVXY /= m;
-                climbY /= m;
-                if (!climbing)
-                {
-                    climbing = true;
-                    //print("开始");
-                    //print("start,tag:" + collision.collider.tag + "h:" + h);
-                }
-                //print("CXY:" + climbVXY + ";CY:" + climbY);
-                return;
-            }
-        }
-        //if (climbing) print("结束");
-        climbing = false;
-    }
-    private void Move(float h, float v)
+
+    protected void Move(float h, float v)
     {
         Vector3 dirXY;
         float vXY = 0;
@@ -154,26 +61,7 @@ public class PlayerController : MonoBehaviour
         vXY = dirXY.sqrMagnitude;
         animator.SetFloat("v", vXY);
 
-        if (!isGround && ySpeed > -8)
-        {
-            ySpeed -= g * Time.deltaTime;
-        }
-        else if (climbing)
-        {
-            float dot = Vector3.Dot(climbVXY, dirXY);
-            if (dot > 0)
-            {
-                //上楼
-                ySpeed = dot * climbY;
-                //print("dot: " + dot + ";y:" + climbY + ";ySpeed:" + ySpeed);
-            }
-            //else if (climbY > 1)
-            //{
-            //    // 下滑
-            //    dirXY = -climbVXY;
-            //    ySpeed = -speed;
-            //}
-        }
+        MoveY(dirXY);
 
         dir = dirXY + Vector3.up * ySpeed;//最终速度矢量
         Debug.DrawLine(transform.position, transform.position + dir);
@@ -186,9 +74,8 @@ public class PlayerController : MonoBehaviour
         }
         GetComponent<Rigidbody>().velocity = dir;
     }
-    [ContextMenu("Error Report")]
-    void ErrorReport()
+    protected virtual void MoveY(Vector3 dirXY)
     {
-        print("ySpeed: " + ySpeed);
+      
     }
 }
