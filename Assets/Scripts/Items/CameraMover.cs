@@ -5,7 +5,6 @@ using UnityEngine;
 /// <summary>
 /// 移动相机，与触发器配合
 /// </summary>
-[RequireComponent(typeof(Collider))]
 [DisallowMultipleComponent]
 [AddComponentMenu("Items/Camera Mover")]
 public class CameraMover : MonoBehaviour
@@ -28,12 +27,11 @@ public class CameraMover : MonoBehaviour
 
     private void Awake()
     {
-        GetComponent<Collider>().isTrigger = true;
         deltaPos = ifFollow ? cam.transform.position - transform.position : cam.transform.position;
         rotation = cam.transform.rotation;
         fieldOfView = cam.fieldOfView;
         tracker = Camera.main.GetComponentInParent<Tracker>();
-        Destroy(cam);
+        cam.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)

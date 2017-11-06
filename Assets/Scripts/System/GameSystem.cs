@@ -7,6 +7,7 @@ public class GameSystem : MonoBehaviour {
     private void Awake()
     {
         settings = this;
+        energy = origEner;
     }
     public static class InputKeys
     {
@@ -60,6 +61,7 @@ public class GameSystem : MonoBehaviour {
     public static int energy = 0;
     [Header("最大能量")]
     public int maxEnergy;
+    public int origEner;
     public static void flushEnergy()
     {
         playerUp.energyRenderer.material.SetTexture("_EmissionMap", playerUp.energyTexture[energy]);
